@@ -14,16 +14,10 @@ let package = Package(
         )
     ],
     targets: [
-        // MARK: - Binary Target
-        // The XCFramework is hosted on AWS S3 and distributed as a prebuilt binary.
-        // Update the URL and checksum when publishing a new version.
-        .binaryTarget(
-            name: "ConsentSDK",
-            // TODO: Replace with production AWS S3 URL after infrastructure setup
-            // Expected format: https://<bucket>.s3.<region>.amazonaws.com/ios/ConsentSDK-<version>.xcframework.zip
-            url: "https://PLACEHOLDER.s3.us-east-1.amazonaws.com/ios/ConsentSDK-1.0.0.xcframework.zip",
-            // TODO: Replace with actual checksum generated via: swift package compute-checksum <file>.zip
-            checksum: "PLACEHOLDER_CHECKSUM_REPLACE_AFTER_UPLOAD"
+       .binaryTarget(
+      name: "ConsentSDK",
+      url: "https://consent-manager-sdk.s3.us-east-1.amazonaws.com/ios-sdk/1.0.2/ConsentSDK.xcframework.zip",
+      checksum: "164df5d838f98397bf22c22128037463367ba79a8975cbe66dd6e4933e2f6758"
         )
     ]
 )
