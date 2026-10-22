@@ -6,6 +6,13 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 ---
 
+## v2.0.2
+
+- The compiled core (`ConsentCore`) is now a static framework: it is linked into your app instead of embedded, so there is nothing to copy into the app bundle. Your app's size does not change; the download is about 5 MB instead of 3.4 MB. The Swift code and the API are unchanged.
+- The React Native package (`@privasapien/react-native-consent-sdk` 2.0.2) now uses this package for its iOS half instead of carrying its own copy.
+
+---
+
 ## v2.0.1
 
 A new SDK with a new API (see the README's "Upgrading from 1.x"). The package URL and the product `ConsentSDK` stay the same.

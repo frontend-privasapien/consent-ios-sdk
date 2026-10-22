@@ -16,20 +16,20 @@ In Xcode: **File → Add Package Dependencies…**, enter
 https://github.com/frontend-privasapien/consent-ios-sdk
 ```
 
-and choose **Up to Next Major Version** from `2.0.1`. Add the **ConsentSDK** product to your app target.
+and choose **Up to Next Major Version** from `2.0.2`. Add the **ConsentSDK** product to your app target.
 
 Or in a `Package.swift`:
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/frontend-privasapien/consent-ios-sdk", from: "2.0.1"),
+    .package(url: "https://github.com/frontend-privasapien/consent-ios-sdk", from: "2.0.2"),
 ],
 targets: [
     .target(name: "YourApp", dependencies: [.product(name: "ConsentSDK", package: "consent-ios-sdk")]),
 ]
 ```
 
-The package compiles the SDK's Swift code and downloads its compiled core (about 3.4 MB) from Privasapien's servers. Xcode checks the download against the checksum in `Package.swift`.
+The package compiles the SDK's Swift code and downloads its compiled core (about 5 MB) from Privasapien's servers. The core is a static framework, linked into your app, so there is nothing to embed. Xcode checks the download against the checksum in `Package.swift`.
 
 ## Use
 
@@ -91,7 +91,7 @@ Version 2 is a new SDK. The package URL and the product name `ConsentSDK` stay t
 
 - Start with `ConsentSdk.shared.initialize(config:listener:)` and a `ConsentConfig`, then `setUser`, `open` and `clearUser`, as above.
 - The sheet is drawn by the SDK and follows your Privasapien configuration; there are no UI modes to choose.
-- An app that asks for `from: "1.0.2"` (Up to Next Major) stays on 1.x until you change it to `2.0.1`.
+- An app that asks for `from: "1.0.2"` (Up to Next Major) stays on 1.x until you change it to `2.0.2`.
 
 ## Other platforms
 

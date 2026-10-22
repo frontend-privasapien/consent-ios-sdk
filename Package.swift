@@ -15,8 +15,8 @@ let package = Package(
     targets: [
         .binaryTarget(
             name: "ConsentCore",
-            url: "https://consent-manager-sdk.s3.us-east-1.amazonaws.com/ios-sdk/2.0.1/ConsentCore.xcframework.zip",
-            checksum: "9ac2a0f101091f8798648a950884d4247eb412e16dccd08fe4a5ba61ba6f7fbe"
+            url: "https://consent-manager-sdk.s3.us-east-1.amazonaws.com/ios-sdk/2.0.2/ConsentCore.xcframework.zip",
+            checksum: "5795b8474cdddcfb5f2c223dffa24143dec981903b491a4d33be16f58b069cdb"
         ),
         .target(name: "ConsentSDK", dependencies: ["ConsentCore"], path: "ios-sdk/Sources/ConsentSDK"),
     ]
