@@ -138,6 +138,23 @@ public final class ConsentSdk: NSObject {
     }
 }
 
+public extension ConsentConfig {
+    /// `ConsentConfig` as it was in 2.0, so apps written for it still compile (D62). `continueUrl` and `apiVersion`
+    /// are nil: Redirect to DSR portal only closes the sheet, and the SDK asks the deployment which API it serves.
+    convenience init(
+        apiBaseUrl: String, appKey: String, applicationId: String, tenant: String, language: String,
+        autoOpen: Bool, skipIfAlreadyConsented: Bool, blockUntilConsented: Bool,
+        readTimeoutMs: Int64, submitTimeoutMs: Int64, logLevel: ConsentLogLevel, logger: ConsentLogger?
+    ) {
+        self.init(
+            apiBaseUrl: apiBaseUrl, appKey: appKey, applicationId: applicationId, tenant: tenant, language: language,
+            autoOpen: autoOpen, skipIfAlreadyConsented: skipIfAlreadyConsented, blockUntilConsented: blockUntilConsented,
+            readTimeoutMs: readTimeoutMs, submitTimeoutMs: submitTimeoutMs, logLevel: logLevel, logger: logger,
+            continueUrl: nil, apiVersion: nil
+        )
+    }
+}
+
 /// The platform log. Core decides what to log and leaves out keys and personal data.
 private final class PlatformLogger: NSObject, ConsentLogger {
     func log(level: ConsentLogLevel, message: String) {

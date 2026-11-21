@@ -12,7 +12,7 @@ private let extraLineSpacing: CGFloat = 4
 /// this only draws: a list is a plain column of blocks, each with its marker and indent.
 struct RichText: View {
     let blocks: [TextBlock]
-    let accent: Color
+    let colours: Colours
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -24,7 +24,7 @@ struct RichText: View {
                     HStack(alignment: .firstTextBaseline, spacing: 0) {
                         Text(block.marker ?? "")
                             .font(.system(size: textSize))
-                            .foregroundColor(textColour)
+                            .foregroundColor(colours.authored)
                             .frame(width: markerWidth, alignment: .leading)
                         blockText(block)
                     }
@@ -35,19 +35,20 @@ struct RichText: View {
     }
 
     private func blockText(_ block: TextBlock) -> some View {
-        Text(attributed(block.spans, accent: accent))
+        // Text the author coloured keeps its colour (a span's own); the rest is the sheet's authored-text colour.
+        Text(attributed(block.spans, link: colours.link))
             .font(.system(size: textSize))
-            .foregroundColor(textColour)
+            .foregroundColor(colours.authored)
             .lineSpacing(extraLineSpacing)
             .multilineTextAlignment(block.alignment.textAlignment)
-            .tint(accent)
+            .tint(colours.link)
             .frame(maxWidth: .infinity, alignment: block.alignment.frameAlignment)
     }
 }
 
-/// The spans as one attributed string. A link is drawn in the accent colour and underlined, so it reads as one on
+/// The spans as one attributed string. A link is drawn in the link colour and underlined, so it reads as one on
 /// any notice; tapping it opens it.
-func attributed(_ spans: [TextSpan], accent: Color) -> AttributedString {
+func attributed(_ spans: [TextSpan], link linkColour: Color) -> AttributedString {
     spans.reduce(into: AttributedString()) { text, span in
         var piece = AttributedString(span.text)
         piece.font = fontOf(span)
@@ -57,7 +58,7 @@ func attributed(_ spans: [TextSpan], accent: Color) -> AttributedString {
         if let background = span.background { piece.backgroundColor = Color(argb: background.int64Value) }
         if let link = span.link, let url = URL(string: link) {
             piece.link = url
-            piece.foregroundColor = accent
+            piece.foregroundColor = linkColour
             piece.underlineStyle = .single
         }
         text.append(piece)

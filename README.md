@@ -6,7 +6,7 @@ Shows Privasapien's consent sheet in your iOS app and records the user's consent
 
 - iOS 15 or newer.
 - Xcode 15 or newer (Swift 5.9).
-- Your app's settings from Privasapien: API base URL, app key, application id and tenant.
+- Your app's settings from Privasapien: API base URL, app key, application id, and tenant (needed on the V2 API only).
 
 ## Install
 
@@ -16,13 +16,13 @@ In Xcode: **File → Add Package Dependencies…**, enter
 https://github.com/frontend-privasapien/consent-ios-sdk
 ```
 
-and choose **Up to Next Major Version** from `2.0.2`. Add the **ConsentSDK** product to your app target.
+and choose **Up to Next Major Version** from `2.1.0`. Add the **ConsentSDK** product to your app target.
 
 Or in a `Package.swift`:
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/frontend-privasapien/consent-ios-sdk", from: "2.0.2"),
+    .package(url: "https://github.com/frontend-privasapien/consent-ios-sdk", from: "2.1.0"),
 ],
 targets: [
     .target(name: "YourApp", dependencies: [.product(name: "ConsentSDK", package: "consent-ios-sdk")]),
@@ -58,7 +58,9 @@ let config = ConsentConfig(
     readTimeoutMs: 15_000,
     submitTimeoutMs: 30_000,
     logLevel: .error,
-    logger: nil
+    logger: nil,
+    continueUrl: "https://…",       // your DSR portal, opened by "Redirect to DSR portal"; nil only closes the sheet
+    apiVersion: nil                 // nil asks your deployment which API it serves; behind an API gateway, pass .v3
 )
 ConsentSdk.shared.initialize(config: config, listener: events)
 
@@ -85,13 +87,20 @@ The sheet presents itself over your app's top view controller and dismisses itse
 
 `ConsentUser` can also carry `uniqueId` and `uniqueIdType` (your own customer key), and `age` with `parentEmail` (required when `age` is under 18). The sheet is available in 23 languages, including English, Hindi and the other scheduled languages of India, with right-to-left layout for Urdu, Kashmiri and Sindhi. The SDK's version is `ConsentSdkInfo.shared.VERSION`; include it when you report a problem.
 
+## Upgrading from 2.0
+
+Apps written for 2.0 build unchanged: the 2.0 `ConsentConfig(...)` still works and leaves both new settings at nil. To use them, add two last arguments:
+
+- `continueUrl`: your DSR portal (an http or https link). *Redirect to DSR portal* on the "already on record" screen opens it after the sheet closes. With nil the button only closes the sheet.
+- `apiVersion`: `.v3` calls the V3 API, which keeps the user's email or phone out of every URL and needs no `tenant`; `.v2` pins V2. With nil the SDK asks your deployment once and uses V2 when it cannot tell. Behind an API gateway, pass `.v3`.
+
 ## Upgrading from 1.x
 
 Version 2 is a new SDK. The package URL and the product name `ConsentSDK` stay the same, but the API is different:
 
 - Start with `ConsentSdk.shared.initialize(config:listener:)` and a `ConsentConfig`, then `setUser`, `open` and `clearUser`, as above.
 - The sheet is drawn by the SDK and follows your Privasapien configuration; there are no UI modes to choose.
-- An app that asks for `from: "1.0.2"` (Up to Next Major) stays on 1.x until you change it to `2.0.2`.
+- An app that asks for `from: "1.0.2"` (Up to Next Major) stays on 1.x until you change it to `2.1.0`.
 
 ## Other platforms
 
